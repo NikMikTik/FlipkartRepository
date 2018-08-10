@@ -1,5 +1,6 @@
 package com.flipkart.controller;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,10 +35,10 @@ public class MerchantController {
 	//GET ALL MERCHANTS LIST
 	@RequestMapping(value = "/allMerchants", method = RequestMethod.GET)
 	public List<MerchantDto> retrieveAllMerchants(HttpServletRequest request) {
-		if(iredis.checkToken(request)==true)
+		if(iredis.checkToken(request))
 		return merchantService.fetchAllUser();
 		else
-		return null;
+		return Collections.emptyList();
 	}
 
 

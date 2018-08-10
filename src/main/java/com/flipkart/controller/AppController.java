@@ -29,7 +29,7 @@ public class AppController {
 	
 	//SIGNIN
 	@RequestMapping(value = "/signIn", method = RequestMethod.POST)
-	public ResponseDto SignIn(@RequestBody MerchantDto merchantDto)  {
+	public ResponseDto login(@RequestBody MerchantDto merchantDto)  {
 		ResponseDto merchant = merchantService.loginFunction(merchantDto);
 		if (merchant == null)
 			throw new FlipkartException("Cannot log in.. Not Authorised.."); 
@@ -39,7 +39,7 @@ public class AppController {
 
 	//SIGNUP	
 	@RequestMapping(value = "/signUp", method = RequestMethod.POST)
-	public String SignUp(@RequestBody MerchantDto merchantDto) {
+	public String registration(@RequestBody MerchantDto merchantDto) {
 		String messgae = merchantService.registrationFunction(merchantDto);
 		if (messgae == null)
 			return "Cannot Register this seller..";
@@ -50,9 +50,8 @@ public class AppController {
 	//LOGOUT
 	@RequestMapping(value = "/logout", method = RequestMethod.DELETE)
 	public ResponseDto logout(@RequestBody MerchantDto merchantDto,HttpServletRequest request) {
-System.out.println("hello");
-		ResponseDto response = merchantService.logoutFunction(merchantDto,request);
-		return response;
+		return merchantService.logoutFunction(merchantDto,request);
+		
 	}
 
 

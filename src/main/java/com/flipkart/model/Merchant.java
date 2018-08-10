@@ -120,7 +120,6 @@ public class Merchant {
 
 	public Merchant() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	

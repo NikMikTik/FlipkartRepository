@@ -106,7 +106,6 @@ public class MerchantAddress {
 
 	public MerchantAddress() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 }
