@@ -89,7 +89,7 @@
 	</dependencies>
 	
 	<build>
-	<finalName>FlipkartMerchantProductListing</finalName>
+	<finalName>Mpl</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

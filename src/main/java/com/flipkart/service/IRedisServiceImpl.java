@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.flipkart.exception.FlipkartException;
@@ -21,8 +20,6 @@ public class IRedisServiceImpl implements IRedisService {
 	@Autowired
 	private RedisTemplate<String, Object> template;
 
-	@Autowired
-	private StringRedisTemplate stringRedisTemplate;
 	
 	@Autowired
 	private MerchantRepository merchantRepository;

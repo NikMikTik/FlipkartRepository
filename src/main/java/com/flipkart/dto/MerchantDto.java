@@ -1,11 +1,9 @@
 package com.flipkart.dto;
 
-import java.util.ArrayList;
-import java.util.Collection;
+
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 import javax.validation.constraints.Email;

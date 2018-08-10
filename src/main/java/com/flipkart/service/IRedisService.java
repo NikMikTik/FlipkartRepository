@@ -4,7 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Service;
 
-import com.flipkart.exception.FlipkartException;
 
 @Service
 public interface IRedisService {
