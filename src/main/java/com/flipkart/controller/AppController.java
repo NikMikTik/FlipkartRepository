@@ -28,31 +28,30 @@ public class AppController {
 	private MerchantService merchantService;
 	
 	//SIGNIN
-	@RequestMapping(value = "/signIn", method = RequestMethod.POST)
-	public ResponseDto login(@RequestBody MerchantDto merchantDto)  {
-		ResponseDto merchant = merchantService.loginFunction(merchantDto);
-		if (merchant == null)
-			throw new FlipkartException("Cannot log in.. Not Authorised.."); 
-		else
-			return merchant;
-	}
+		@RequestMapping(value = "/signIn", method = RequestMethod.POST)
+		public ResponseDto SignIn(@RequestBody MerchantDto merchantDto)  {
+			ResponseDto merchant = merchantService.loginFunction(merchantDto);
+			if (merchant == null)
+				throw new FlipkartException("Cannot log in.. Not Authorised.."); 
+			else
+				return merchant;
+		}
 
-	//SIGNUP	
-	@RequestMapping(value = "/signUp", method = RequestMethod.POST)
-	public String registration(@RequestBody MerchantDto merchantDto) {
-		String messgae = merchantService.registrationFunction(merchantDto);
-		if (messgae == null)
-			return "Cannot Register this seller..";
-		else
-			return "Registered Successfully";
-	}
-	
-	//LOGOUT
-	@RequestMapping(value = "/logout", method = RequestMethod.DELETE)
-	public ResponseDto logout(@RequestBody MerchantDto merchantDto,HttpServletRequest request) {
-		return merchantService.logoutFunction(merchantDto,request);
+		//SIGNUP	
+		@RequestMapping(value = "/signUp", method = RequestMethod.POST)
+		public ResponseDto SignUp(@RequestBody MerchantDto merchantDto) {
+			ResponseDto messgae = merchantService.registrationFunction(merchantDto);
+			return messgae;
+			
+		}
 		
-	}
+		//LOGOUT
+		@RequestMapping(value = "/logout", method = RequestMethod.DELETE)
+		public ResponseDto logout(@RequestBody MerchantDto merchantDto,HttpServletRequest request) {
+			ResponseDto response = merchantService.logoutFunction(merchantDto,request);
+			return response;
+		}
+
 
 
 }

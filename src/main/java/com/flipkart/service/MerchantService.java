@@ -13,7 +13,7 @@ public interface MerchantService {
 	
 	public ResponseDto loginFunction(MerchantDto merchantDto);
 
-	public String registrationFunction(MerchantDto merchantDto);
+	public ResponseDto registrationFunction(MerchantDto merchantDto);
 
 	public List<MerchantDto> fetchAllUser() ;
 

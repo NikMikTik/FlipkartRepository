@@ -1,6 +1,5 @@
 package com.flipkart.service;
 
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,7 +26,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 @Transactional
-public class MerchantServiceImpl implements  MerchantService {
+public class MerchantServiceImpl implements MerchantService {
 
 	Logger logger = LoggerFactory.getLogger(MerchantServiceImpl.class);
 	ModelMapper modelMapper = new ModelMapper();
@@ -35,68 +34,67 @@ public class MerchantServiceImpl implements  MerchantService {
 
 	@Autowired
 	private MerchantRepository merchantRepository;
-	
-	
+
 	@Autowired
 	private IRedisService iredis;
-	
-	
 
-	
 	@Override
 	public ResponseDto loginFunction(MerchantDto merchantDto) {
 		ResponseDto response = new ResponseDto();
-		Merchant merchant=merchantRepository.findByMerchantEmail(merchantDto.getMerchantEmail());
-		if(merchantRepository.findByMerchantEmail(merchantDto.getMerchantEmail())==null)
-		{response.setCode(HttpStatus.UNAUTHORIZED.value());
-		response.setMessage("Not a valid Email..");
-		response.setResponse("Access Denied");
-		return response;
+		Merchant merchant = merchantRepository.findByMerchantEmail(merchantDto.getMerchantEmail());
+		if (merchantRepository.findByMerchantEmail(merchantDto.getMerchantEmail()) == null) {
+			response.setCode(HttpStatus.UNAUTHORIZED.value());
+			response.setMessage("Not a valid Email..");
+			response.setResponse("Access Denied");
+			return response;
 		}
-		if(bCryptPasswordEncoder.matches(merchantDto.getMerchantPassword(), merchant.getMerchantPassword())) {
-		String token=null;
-		try {
-			 token = Jwts.builder().setSubject("flipkart"+merchant.getMerchantName()+"flipkart").claim("scope", "self groups/admins")
+		if (bCryptPasswordEncoder.matches(merchantDto.getMerchantPassword(), merchant.getMerchantPassword())) {
+			String token = null;
+			try {
+				token = Jwts.builder().setSubject("flipkart" + merchant.getMerchantName() + "flipkart")
+						.claim("scope", "self groups/admins")
 						.signWith(SignatureAlgorithm.HS256, "secret".getBytes("UTF-8"))
 						.setIssuedAt(new Date(System.currentTimeMillis()))
 						.setExpiration(new Date(System.currentTimeMillis() + 10000)).compact();
-			iredis.setValue(token,merchant.getMerchantEmail());
-			response.setCode(HttpStatus.OK.value());
-			response.setMessage("Merchant successfully logged In");
-			response.setResponse("Access Given");
-			response.setToken(token);
+				iredis.setValue(token, merchant.getMerchantEmail());
+				response.setCode(HttpStatus.OK.value());
+				response.setMessage("Merchant successfully logged In");
+				response.setResponse("Access Given");
+				response.setToken(token);
+				return response;
+			} catch (Exception e) {
+
+				e.printStackTrace();
+			}
+
+		} else {
+			response.setCode(HttpStatus.UNAUTHORIZED.value());
+			response.setMessage("Email/Password Not valid");
+			response.setResponse("Access Denied");
 			return response;
-		} catch (Exception e) {
-
-			e.printStackTrace();
-		}
-		
-		}
-		else
-		{response.setCode(HttpStatus.UNAUTHORIZED.value());
-		response.setMessage("Email/Password Not valid");
-		response.setResponse("Access Denied");
-		return response;
 		}
 		return response;
-		
 
-
-		
 	}
 
 	@Override
-	public String registrationFunction(MerchantDto merchantDto) {
+	public ResponseDto registrationFunction(MerchantDto merchantDto) {
 		Merchant merchant = new Merchant();
+		ResponseDto response = new ResponseDto();
 		merchant = modelMapper.map(merchantDto, Merchant.class);
 		if (merchantDto.getMerchantPassword().equals(merchantDto.getMerchantConfirmPassword())) {
 			merchant.setMerchantPassword(bCryptPasswordEncoder.encode(merchantDto.getMerchantPassword()));
 			merchantRepository.save(merchant);
-			return "Registered Successfully";
+			response.setCode(HttpStatus.OK.value());
+			response.setMessage("Registered Successfully...");
+			response.setResponse("You can access you account Now");
+			return response;
 		} else {
-			return "Cannot Register this seller";
+			response.setCode(HttpStatus.FORBIDDEN.value());
+			response.setMessage("Cannot Register");
+			response.setResponse("You need to register first to have Access..");
+			return response;
 		}
-
 	}
 
 	@Override
@@ -116,18 +114,16 @@ public class MerchantServiceImpl implements  MerchantService {
 	}
 
 	@Override
-	public ResponseDto logoutFunction(MerchantDto merchantDto,HttpServletRequest request) {
-		String token=request.getHeader("Authorization");
+	public ResponseDto logoutFunction(MerchantDto merchantDto, HttpServletRequest request) {
+		String token = request.getHeader("Authorization");
 		iredis.deleteValue(token);
-		ResponseDto responseDto=new ResponseDto();
+		ResponseDto responseDto = new ResponseDto();
 		responseDto.setCode(HttpStatus.OK.value());
 		responseDto.setMessage("Successfully logged out");
 		responseDto.setToken("Token Deleted");
 		responseDto.setResponse("To get Access, Login Again");
 		return responseDto;
-		
-		
+
 	}
 
-	
 }
