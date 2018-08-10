@@ -52,6 +52,7 @@ public class AppController {
 	//LOGOUT
 	@RequestMapping(value = "/logout", method = RequestMethod.DELETE)
 	public ResponseDto logout(@RequestBody MerchantDto merchantDto,HttpServletRequest request) {
+System.out.println("hello");
 		ResponseDto response = merchantService.logoutFunction(merchantDto,request);
 		return response;
 	}
